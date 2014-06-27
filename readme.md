@@ -4,7 +4,7 @@
 Boilerplate to start project with grunt, sass, requirejs
 
 <br />
-<img src="http://gruntjs.com/img/grunt-logo.png" width="200" />
+<img src="http://gruntjs.com/img/grunt-logo.png" align="center" width="200" />
 
 
 ### REQUIREMENT
