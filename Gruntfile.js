@@ -9,7 +9,11 @@ module.exports = function(grunt) {
 
     // JS HINT
     jshint: {
-      all: ['Gruntfile.js', '<%= config.app_path %>/**/*.js']
+      all: ['Gruntfile.js', '<%= config.app_path %>/**/*.js'],
+      options: {
+          force: true,
+          reporter: require('jshint-stylish')
+      }
     },
 
     // VENDORS JS
