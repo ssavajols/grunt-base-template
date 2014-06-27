@@ -1,7 +1,5 @@
 module.exports = function(grunt) {
 
-  var config = grunt.file.readJSON('config_path.json');
-
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -45,7 +43,7 @@ module.exports = function(grunt) {
       compile: {
         options: {
           baseUrl: "<%= config.app_path %>",
-          include: config.require_include_modules,
+          include: "<%= config.require_include_modules %>",
           name: "../vendor/_almond", // assumes a production build using almond
           out: "<%= config.public_path %>/<%= config.js_dir %>/app.js",
           optimize: "uglify2",
