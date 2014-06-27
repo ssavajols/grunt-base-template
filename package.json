@@ -1,0 +1,26 @@
+{
+  "name": "grunt-template",
+  "version": "0.0.0",
+  "description": "Grunt base template",
+  "main": "index.js",
+  "dependencies": {
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {
+    "grunt-contrib-connect": "^0.8.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-contrib-sass": "^0.7.3",
+    "grunt-contrib-uglify": "^0.5.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-php": "^0.4.0"
+  },
+  "scripts": {
+    "start": "grunt watch_server",
+    "start_no_server": "grunt watch_no_server",
+    "start_php": "grunt watch_php",
+    "build": "grunt compile"
+  },
+  "author": "ssavajols",
+  "license": "ISC"
+}

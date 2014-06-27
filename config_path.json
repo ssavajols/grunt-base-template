@@ -1,0 +1,14 @@
+{
+  "public_path": "./public",
+  "vendor_path": "./vendor",
+  "sass_path": "./scss",
+  "app_path": "./app",
+  "css_dir": "css",
+  "js_dir": "js",
+
+  "protocole": "http",
+  "hostname": "localhost",
+  "port": 8080,
+
+  "require_include_modules" : ["main"]
+}
