@@ -1,5 +1,4 @@
 # GRUNT-BASE-TEMPLATE
-<hr />
 
 Boilerplate to start project with grunt, sass, requirejs
 
