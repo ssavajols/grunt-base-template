@@ -7,38 +7,75 @@ module.exports = function(grunt) {
 
     // JS HINT
     jshint: {
-      all: ['Gruntfile.js', '<%= config.app_path %>/**/*.js'],
+      all: ['Gruntfile.js', '<%= config.app_path %>/**/*.js' ],
       options: {
           force: true,
           reporter: require('jshint-stylish')
       }
     },
 
-    // VENDORS JS
+    // FOR DEV APP FILES AND VENDOR FILES JS
     uglify: {
-      options: {
-        mangle: false,
-        sourceMap:true,
-        compress: true,
-        preserveComments: false
-      },
-      vendor: {
-        files: {
-          '<%= config.public_path %>/<%= config.js_dir %>/vendor.js':
-           [
-              // BEFORE
+        options: {
+            mangle: false,
+            sourceMap:true,
+            compress: true,
+            preserveComments: false
+        },
+        dev_vendor:{
+            options: {
+              compress: {
+                  warnings: false
+              }
+            },
+            files: {
+                '<%= config.public_path %>/<%= config.js_dir %>/vendor.js':
+                    [
+                        // BEFORE
+                        '<%= config.vendor_path %>/require.js',
 
-              // ALL
-              '<%= config.vendor_path %>/**/*.js',
-              '!<%= config.vendor_path %>/**/_*.js' // IGNORED
+                        // ALL
+                        '<%= config.vendor_path %>/**/*.js',
+                        '!<%= config.vendor_path %>/**/_*.js' // IGNORED
 
-              // AFTER
-           ]
+                        // AFTER
+                    ]
+            }
+        },
+        dev_app:{
+            files: {
+                "<%= config.public_path %>/<%= config.js_dir %>/app.js":
+                    [
+                        '<%= config.app_path %>/**/*.js',
+                        '!<%= config.vendor_path %>/**/_*.js' // IGNORED
+                    ]
+            }
+        },
+        // ONLY VENDORS
+        prod: {
+            options: {
+                compress: {
+                    drop_console: true,
+                    warnings: false
+                }
+            },
+            files: {
+                '<%= config.public_path %>/<%= config.js_dir %>/vendor.js':
+                    [
+                        // BEFORE
+
+                        // ALL
+                        '<%= config.vendor_path %>/**/*.js',
+                        '!<%= config.vendor_path %>/**/_*.js', // IGNORED
+                        '!<%= config.vendor_path %>/require.js'
+
+                        // AFTER
+                    ]
+            }
         }
-      }
     },
 
-    // APP FILES
+    // APP FILES FOR BUILD ONLY
     requirejs: {
       compile: {
         options: {
@@ -107,9 +144,10 @@ module.exports = function(grunt) {
       },
       scripts: {
         files: ['<%= config.app_path %>/**/*.js'],
-        tasks: ['jshint', 'requirejs'],
+        tasks: ['jshint','uglify:dev_app'],
         options: {
-          spawn: false
+          spawn: false,
+          livereload: true
         },
       },
       sass: {
@@ -126,10 +164,11 @@ module.exports = function(grunt) {
       },
       vendor: {
         files: ['<%= config.vendor_path %>/**/*.js'],
-        tasks: ['uglify'],
+        tasks: ['uglify:dev_vendor'],
         options: {
-          spawn: false
-        },
+          spawn: false,
+          livereload: true
+        }
       }
     }
   });
@@ -143,14 +182,17 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-php');
 
+
   // REGISTER TASKS
   // $ grunt // Will trigger "degault" task
   // $ grunt compile // Will trigger "compile" task
   // which perform "jshint", "sass", "uglify", "requirejs" tasks
-  grunt.registerTask('compile', ["jshint", "sass", "uglify", "requirejs"]);
-  grunt.registerTask('watch_php', ["compile", "php", "watch"]);
-  grunt.registerTask('watch_server', ["compile", "connect", "watch"]);
-  grunt.registerTask('watch_no_server', ["compile", "watch"]);
+
+  grunt.registerTask('compile', ["jshint", "uglify:prod", "requirejs", "sass"]);
+  grunt.registerTask('watch_tasks', ["jshint", "uglify:dev_vendor", "uglify:dev_app", "sass"]);
+  grunt.registerTask('watch_php', ["watch_tasks", "php", "watch"]);
+  grunt.registerTask('watch_server', ["watch_tasks", "connect", "watch"]);
+  grunt.registerTask('watch_no_server', ["watch_tasks", "watch"]);
   grunt.registerTask('default', ["watch_server"]);
 
 };
