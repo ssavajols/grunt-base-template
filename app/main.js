@@ -1,4 +1,3 @@
-define(function() {
-  require('mod');
+define('main',['mod'], function(mod) {
   alert('ok4');
 });

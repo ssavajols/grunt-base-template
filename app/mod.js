@@ -1,4 +1,4 @@
-define(function(){
+define('mod', function(){
   alert('test2');
 });
 
