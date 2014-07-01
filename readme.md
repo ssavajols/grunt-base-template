@@ -23,13 +23,13 @@ Sass is required to compile CSS files :
 <hr />
 ### HOW TO USE
 
-	$ nom install                  // Will install node module packages. Execute once before start project
+	$ npm install                  // Will install node module packages. Execute once before start project
 
-	$ nom start                    // Start watcher with html server
-	$ nom run start                // Same as npm start
-	$ nom run start_php            // Start watcher with php server
+	$ npm start                    // Start watcher with html server
+	$ npm run start                // Same as npm start
+	$ npm run start_php            // Start watcher with php server
 	$ npm run start_no_server      // Start watcher without server
-	$ nom run build                // Compile files only without watcher
+	$ npm run build                // Compile files only without watcher
 
 
 
