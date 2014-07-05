@@ -32,13 +32,13 @@ module.exports = function(grunt) {
                 '<%= config.public_path %>/<%= config.js_dir %>/vendor.js':
                     [
                         // BEFORE
-                        '<%= config.vendor_path %>/require.js',
 
                         // ALL
                         '<%= config.vendor_path %>/**/*.js',
-                        '!<%= config.vendor_path %>/**/_*.js' // IGNORED
+                        '!<%= config.vendor_path %>/**/_*.js', // IGNORED
 
                         // AFTER
+                        '<%= config.vendor_path %>/require.js'
                     ]
             }
         },
