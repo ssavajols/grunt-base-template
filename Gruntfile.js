@@ -47,7 +47,7 @@ module.exports = function(grunt) {
                 "<%= config.public_path %>/<%= config.js_dir %>/app.js":
                     [
                         '<%= config.app_path %>/**/*.js',
-                        '!<%= config.vendor_path %>/**/_*.js' // IGNORED
+                        '!<%= config.app_path %>/**/_*.js' // IGNORED
                     ]
             }
         },
