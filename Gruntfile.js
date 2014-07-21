@@ -17,7 +17,7 @@ module.exports = function(grunt) {
     // FOR DEV APP FILES AND VENDOR FILES JS
     uglify: {
         options: {
-            mangle: false,
+            mangle: true,
             sourceMap:true,
             compress: true,
             preserveComments: false
