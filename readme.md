@@ -115,7 +115,7 @@ module.exports = function(grunt) {
     // FOR DEV APP FILES AND VENDOR FILES JS
     uglify: {
         options: {
-            mangle: false,
+            mangle: true,
             sourceMap:true,
             compress: true,
             preserveComments: false
@@ -145,13 +145,14 @@ module.exports = function(grunt) {
                 "<%= config.public_path %>/<%= config.js_dir %>/app.js":
                     [
                         '<%= config.app_path %>/**/*.js',
-                        '!<%= config.vendor_path %>/**/_*.js' // IGNORED
+                        '!<%= config.app_path %>/**/_*.js' // IGNORED
                     ]
             }
         },
         // ONLY VENDORS
         prod: {
             options: {
+                sourceMap:false,
                 compress: {
                     drop_console: true,
                     warnings: false
@@ -182,7 +183,7 @@ module.exports = function(grunt) {
           name: "../vendor/_almond", // assumes a production build using almond
           out: "<%= config.public_path %>/<%= config.js_dir %>/app.js",
           optimize: "uglify2",
-          generateSourceMaps: true,
+          generateSourceMaps: false,
           preserveLicenseComments: false,
           findNestedDependencies: true
         }
