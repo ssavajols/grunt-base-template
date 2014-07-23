@@ -54,6 +54,7 @@ module.exports = function(grunt) {
         // ONLY VENDORS
         prod: {
             options: {
+                sourceMap:false,
                 compress: {
                     drop_console: true,
                     warnings: false
@@ -84,7 +85,7 @@ module.exports = function(grunt) {
           name: "../vendor/_almond", // assumes a production build using almond
           out: "<%= config.public_path %>/<%= config.js_dir %>/app.js",
           optimize: "uglify2",
-          generateSourceMaps: true,
+          generateSourceMaps: false,
           preserveLicenseComments: false,
           findNestedDependencies: true
         }
