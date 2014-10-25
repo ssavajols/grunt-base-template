@@ -64,8 +64,8 @@ Sass is required to compile CSS files :
 
   "bower_dependencies" : {                 // Bower JS libraries dependencies
   },
-  "bower_main_files" : {                   // Bower mainFiles for missing mainFiles path in bower.json file library
-  }
+  "bower_main_files" : {                   // Bower mainFiles for missing mainFiles path
+  }                                        // in bower.json file library
 }
 ```
 
