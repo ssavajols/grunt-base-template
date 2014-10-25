@@ -1,6 +1,6 @@
 # GRUNT-BASE-TEMPLATE
 
-Boilerplate to start project with grunt, sass, requirejs
+Boilerplate to start project with grunt, bower, sass, requirejs
 
 <br />
 <img src="http://gruntjs.com/img/grunt-logo.png" align="center" width="200" />
