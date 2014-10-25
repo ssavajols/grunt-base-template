@@ -29,7 +29,9 @@ Sass is required to compile CSS files :
 <hr />
 ### HOW TO USE
 
-	$ npm install                  // Will install node module packages. Execute once before start project
+	$ npm install                  // Will install node module packages.
+	                               // Execute once before start project
+
 	$ bower install                // Will install bower javascript libraries.
 
 	$ npm start                    // Start watcher with html server
@@ -104,19 +106,24 @@ Require main modules. Dependencies will be detected and automatically included.
 
 ##### bower_dependencies
 Bower dependencies libraries.
-Ex: Backbone need jquery and underscore.
+
+```javascript
+// Ex: Backbone need jquery and underscore.
 
 "backbone" : ["jquery", "underscore"]
+```
 
 ##### bower_main_files
 Some libraries didn't explicitly declare mainFile to use. Bower_concat need to know which file is needed to compile and
-concat it with other vendors.
+concat it with other vendors.<br /><br />
 
-Ex: simple-slideshow
+```javascript
+// Ex: simple-slideshow
 
 mainFiles: {
   'simple-slideshow': ['dist/simple-slideshow.min.js', 'dist/simple-slideshow.min.css']
 }
+```
 
 #### Gruntfile.js
 
