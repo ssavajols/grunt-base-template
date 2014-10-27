@@ -92,7 +92,6 @@ module.exports = function (grunt) {
                 dependencies: config.bower_dependencies,
                 mainFiles: config.bower_main_files,
                 bowerOptions: {
-                    sourceMap: true
                 }
             },
             prod: {
