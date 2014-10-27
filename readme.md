@@ -248,7 +248,6 @@ module.exports = function (grunt) {
                 dependencies: config.bower_dependencies,
                 mainFiles: config.bower_main_files,
                 bowerOptions: {
-                    sourceMap: true
                 }
             },
             prod: {
@@ -390,7 +389,6 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ["watch_server"]);
 
 };
-
 ```
 
 <hr />
