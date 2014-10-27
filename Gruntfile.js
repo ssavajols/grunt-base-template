@@ -26,6 +26,7 @@ module.exports = function (grunt) {
             },
             dev_vendor: {
                 options: {
+                    sourceMapIn:'<%= config.tmp_path %>/_bower.js.map',
                     compress: {
                         warnings: false
                     }
@@ -216,7 +217,7 @@ module.exports = function (grunt) {
 
 
     // REGISTER TASKS
-    // $ grunt // Will trigger "degault" task
+    // $ grunt // Will trigger "default" task
     // $ grunt compile // Will trigger "compile" task
     // which perform "jshint", "sass", "uglify", "requirejs" tasks
 
