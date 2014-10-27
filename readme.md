@@ -27,6 +27,29 @@ Sass is required to compile CSS files :
 	$ sudo gem install sass
 
 <hr />
+
+### DIRECTORY TREE
+
+```
+- app/                               // Application JS files
+     - main.js
+     - mod.js
+- public/                            // Output compilation folder
+     - css/
+     - js/
+     - index.html
+     - index.php
+- scss/                              // SCSS files
+     - style.scss
+- tmp/                               // Processed files (ex: bower_components output concatenation)
+- vendor/                            // Vendors (incl: bower_components/ install folder)
+- readme.md           
+- Grunfile.js                        // Grunt configuration file
+- bower.json                         // Bower configuration file
+- config_app.json                    // Application configuration file
+- package.json                       // Node configuration file
+```
+
 ### HOW TO USE
 
 	$ npm install                  // Will install node module packages.
