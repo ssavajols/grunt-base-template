@@ -1,3 +1,5 @@
 define('main',['mod'], function(mod) {
-  alert('ok4');
+
+  var data = {message: "this is a sample text from hbs file"};
+  document.body.innerHTML = document.body.innerHTML + hbsTemplate["templates/sample"](data);
 });

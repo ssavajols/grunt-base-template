@@ -4,4 +4,6 @@
 .idea
 vendor/bower_components
 node_modules
-_tmp/
+tmp/
+public/js
+public/css
