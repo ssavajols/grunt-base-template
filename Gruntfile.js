@@ -18,7 +18,7 @@ module.exports = function (grunt) {
 
         clean: {
             sourceMap: ["<%= config.public_path %>/**/*.map"],
-            tmp: ["<%= config.tmp_path %>/*"]
+            tmp: ["<%= config.tmp_path %>/*", "<%= config.public_path %>/**/*.map"]
         },
 
         // FOR DEV APP FILES AND VENDOR FILES JS
