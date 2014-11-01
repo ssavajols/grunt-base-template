@@ -12,6 +12,9 @@
   "port": 8080,
 
   "require_include_modules" : ["main"],
+
+  "handlebars_template_container": "hbsTemplate",
+
   "bower_dependencies" : {
   },
   "bower_main_files" : {

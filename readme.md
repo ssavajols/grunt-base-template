@@ -84,13 +84,15 @@ Sass is required to compile CSS files :
   "hostname": "localhost",          // Server hostname (localhost|127.0.0.1)
   "port": 8080,                     // Server port (8080|80)
 
-  "require_include_modules" : ["main"]     // Main modules in app folder.
-                                           // Dependencies will be automatically detected
+  "require_include_modules" : ["main"]             // Main modules in app folder.
+                                                   // Dependencies will be automatically detected
 
-  "bower_dependencies" : {                 // Bower JS libraries dependencies
+  "handlebars_template_container": "hbsTemplate",  // Set handlebars global container namespace
+
+  "bower_dependencies" : {                         // Bower JS libraries dependencies
   },
-  "bower_main_files" : {                   // Bower mainFiles for missing mainFiles path
-  }                                        // in bower.json file library
+  "bower_main_files" : {                           // Bower mainFiles for missing mainFiles path
+  }                                                // in bower.json file library
 }
 ```
 
@@ -148,6 +150,18 @@ mainFiles: {
 }
 ```
 
+##### handlebars_template_container
+
+All handlebars files ares compiled into vendor.js. They are compiled into hbsTemplate globale object.
+
+```javascript
+// Ex:
+    var data = {message: "This is data."};
+
+    var html = hbsTemplate["templates/sample"](data);
+```
+
+
 #### Gruntfile.js
 
 Most configuration parameters are in the config_app.json file.
@@ -172,6 +186,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // CLEAN USELESS FILES ON BUILD PROJECT
         clean: {
             sourceMap: ["<%= config.public_path %>/**/*.map"],
             tmp: ["<%= config.tmp_path %>/*"]
@@ -185,33 +200,37 @@ module.exports = function (grunt) {
                 compress: true,
                 preserveComments: false
             },
+            uglify_vendor_files: {
+                '<%= config.public_path %>/<%= config.js_dir %>/vendor.js': [
+                    // BEFORE
+                    '<%= config.tmp_path %>/_bower.js',
+                    '<%= config.tmp_path %>/_handlebars.js',
+
+                    // ALL
+                    '<%= config.vendor_path %>/**/*.js',
+                    '!<%= config.vendor_path %>/**/_*.js', // IGNORED
+                    '!<%= config.vendor_path %>/bower_components/**/*'
+
+                    // AFTER
+                ]
+            },
+
+            uglify_dev_files: {
+                "<%= config.public_path %>/<%= config.js_dir %>/app.js": [
+                    '<%= config.app_path %>/**/*.js',
+                    '!<%= config.app_path %>/**/_*.js' // IGNORED
+                ]
+            },
             dev_vendor: {
                 options: {
                     compress: {
                         warnings: false
                     }
                 },
-                files: {
-                    '<%= config.public_path %>/<%= config.js_dir %>/vendor.js': [
-                        // BEFORE
-                        '<%= config.tmp_path %>/_bower.js',
-
-                        // ALL
-                        '<%= config.vendor_path %>/**/*.js',
-                        '!<%= config.vendor_path %>/**/_*.js', // IGNORED
-                        '!<%= config.vendor_path %>/bower_components/**/*'
-
-                        // AFTER
-                    ]
-                }
+                files: '<%= uglify.uglify_vendor_files %>'
             },
             dev_app: {
-                files: {
-                    "<%= config.public_path %>/<%= config.js_dir %>/app.js": [
-                        '<%= config.app_path %>/**/*.js',
-                        '!<%= config.app_path %>/**/_*.js' // IGNORED
-                    ]
-                }
+                files: '<%= uglify.uglify_dev_files %>'
             },
             // ONLY VENDORS
             prod: {
@@ -222,22 +241,11 @@ module.exports = function (grunt) {
                         warnings: false
                     }
                 },
-                files: {
-                    '<%= config.public_path %>/<%= config.js_dir %>/vendor.js': [
-                        // BEFORE
-                        '<%= config.tmp_path %>/_bower.js',
-
-                        // ALL
-                        '<%= config.vendor_path %>/**/*.js',
-                        '!<%= config.vendor_path %>/**/_*.js', // IGNORED
-                        '!<%= config.vendor_path %>/bower_components/**/*'
-
-                        // AFTER
-                    ]
-                }
+                files: '<%= uglify.uglify_vendor_files %>'
             }
         },
 
+        // CONCATENATION FOR BOWER COMPONENTS
         bower_concat: {
             dev: {
                 dest: '<%= config.tmp_path %>/_bower.js',
@@ -298,6 +306,21 @@ module.exports = function (grunt) {
             }
         },
 
+        // HANDLEBARS FILES
+        handlebars: {
+            compile: {
+                options: {
+                    namespace: "hbsTemplate",
+                    processName: function(filePath) {
+                        return filePath.replace(new RegExp(config.app_path+"\/(.*).hbs"), "$1");
+                    }
+                },
+                files: {
+                    "<%= config.tmp_path %>/_handlebars.js": "<%= config.app_path %>/**/*.hbs"
+                }
+            }
+        },
+
         // WEB SERVER HTML
         connect: {
             dev: {
@@ -345,6 +368,11 @@ module.exports = function (grunt) {
                 files: ['<%= config.sass_path %>/**/*.scss'],
                 tasks: ['sass']
             },
+            handlebars: {
+                files: ['<%= config.app_path %>/**/*.hbs'],
+                tasks: ['handlebars', 'uglify:dev_vendor'],
+                livereload: true
+            },
             css: {
                 files: ['<%= config.public_path %>/**/*.css'],
                 options: {
@@ -355,7 +383,7 @@ module.exports = function (grunt) {
             },
             vendor: {
                 files: ['<%= config.vendor_path %>/**/*.js', '<%= config.vendor_path %>/**/*.css'],
-                tasks: ['bower_concat', 'uglify:dev_vendor', "clean:tmp"],
+                tasks: ['bower_concat', 'uglify:dev_vendor'],
                 options: {
                     spawn: false,
                     livereload: true
@@ -372,6 +400,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-bower-concat');
     grunt.loadNpmTasks('grunt-php');
 
@@ -381,8 +410,8 @@ module.exports = function (grunt) {
     // $ grunt compile // Will trigger "compile" task
     // which perform "jshint", "sass", "uglify", "requirejs" tasks
 
-    grunt.registerTask('compile', ["jshint", "bower_concat:prod", "uglify:prod", "requirejs", "sass", "clean"]);
-    grunt.registerTask('watch_tasks', ["jshint", "bower_concat:dev", "uglify:dev_vendor", "uglify:dev_app", "sass", "clean:tmp"]);
+    grunt.registerTask('compile', ["jshint", "bower_concat:prod", "handlebars", "uglify:prod", "requirejs", "sass", "clean"]);
+    grunt.registerTask('watch_tasks', ["jshint", "bower_concat:dev", "handlebars", "uglify:dev_vendor", "uglify:dev_app", "sass"]);
     grunt.registerTask('watch_php', ["watch_tasks", "php", "watch"]);
     grunt.registerTask('watch_server', ["watch_tasks", "connect", "watch"]);
     grunt.registerTask('watch_no_server', ["watch_tasks", "watch"]);
@@ -402,6 +431,8 @@ module.exports = function (grunt) {
 [grunt-contrib-requirejs](https://github.com/gruntjs/grunt-contrib-requirejs)<br />
 [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint)<br />
 [grunt-contrib-connect](https://github.com/gruntjs/grunt-contrib-connect)<br />
+[grunt-contrib-clean](https://github.com/gruntjs/grunt-contrib-clean)<br />
+[grunt-contrib-handlebars](https://github.com/gruntjs/grunt-contrib-handlebars)<br />
 [grunt-bower-concat](https://github.com/sapegin/grunt-bower-concat)<br />
 [grunt-php](https://github.com/sindresorhus/grunt-php)
 
@@ -409,6 +440,7 @@ module.exports = function (grunt) {
 ## Tutorials
 
 [Grunt video tutorial](https://www.youtube.com/watch?v=q3Sqljpr-Vc)<br />
+[Handlebars video tutorial](http://www.youtube.com/watch?v=uFytR93-PDc)<br />
 [Bower video tutorial](https://egghead.io/lessons/bower-introduction-and-setup)<br />
 [SASS video tutorial](https://www.youtube.com/watch?v=fbVD32w1oTo&list=PL2CB1F80266E986EA)<br />
 [requireJS video tutorial](https://www.youtube.com/watch?v=VGlDR1QiV3A)

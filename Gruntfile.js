@@ -16,9 +16,10 @@ module.exports = function (grunt) {
             }
         },
 
+        // CLEAN USELESS FILES ON BUILD PROJECT
         clean: {
             sourceMap: ["<%= config.public_path %>/**/*.map"],
-            tmp: ["<%= config.tmp_path %>/*", "<%= config.public_path %>/**/*.map"]
+            tmp: ["<%= config.tmp_path %>/*"]
         },
 
         // FOR DEV APP FILES AND VENDOR FILES JS
@@ -74,6 +75,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // CONCATENATION FOR BOWER COMPONENTS
         bower_concat: {
             dev: {
                 dest: '<%= config.tmp_path %>/_bower.js',
@@ -138,7 +140,7 @@ module.exports = function (grunt) {
         handlebars: {
             compile: {
                 options: {
-                    namespace: "hbsTemplate",
+                    namespace: "<%= config.handlebars_template_container %>",
                     processName: function(filePath) {
                         return filePath.replace(new RegExp(config.app_path+"\/(.*).hbs"), "$1");
                     }
@@ -198,7 +200,8 @@ module.exports = function (grunt) {
             },
             handlebars: {
                 files: ['<%= config.app_path %>/**/*.hbs'],
-                tasks: ['handlebars', 'uglify:dev_vendor']
+                tasks: ['handlebars', 'uglify:dev_vendor'],
+                livereload: true
             },
             css: {
                 files: ['<%= config.public_path %>/**/*.css'],
