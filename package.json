@@ -22,8 +22,8 @@
     "jshint-stylish": "^0.2.0"
   },
   "scripts": {
-    "start": "grunt watch_server --force --silent",
-    "start_no_server": "grunt watch_no_server --force --silent",
+    "start_": "grunt watch_server --force --silent",
+    "start": "grunt watch_no_server --force --silent",
     "start_php": "grunt watch_php --force --silent",
     "build": "grunt compile --force"
   },
